@@ -6,12 +6,11 @@
 
 import {useState} from "react";
 
-export default function TransactionForm() {
+export default function TransactionForm({  setTransaction }) {
 
   const [amount, setAmount] = useState("")
   const [category, setCategory] = useState("Food")
   const [type, setType] = useState("Income")
-  const [transaction, setTransaction] = useState([])
   const [error, setError] = useState(true)
 
 
@@ -114,28 +113,6 @@ export default function TransactionForm() {
           className={"border-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-40"}
           onClick={saveTransaction}>Add Transaction
         </button>
-      </div>
-
-      {/*History Section*/}
-      <div className={"mt-10"}>
-        <h1 className={"text-xl font-bold text-center"}>Transactions</h1>
-        {transaction.length === 0 ? (
-          <p className={"text-center mt-5"}> No Transactions</p>
-        ) : (
-          transaction.map((t, index) => (
-            <div className={"text-center mt-3"} key={index}>
-              <p>Amount : {t.amount}</p>
-              <p>Category : {t.category}</p>
-              <p>Type : {t.type}</p>
-              <button
-                className={"bg-red-600 hover:bg-red-400 p-1 px-4 mt-3 rounded-md text-white"}
-                onClick={() => setTransaction(prev => prev.filter((_, i) => i !== index))}
-              >
-                Delete
-              </button>
-            </div>))
-        )}
-
       </div>
     </div>
   )
