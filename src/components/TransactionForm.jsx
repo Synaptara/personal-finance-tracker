@@ -11,7 +11,7 @@ export default function TransactionForm({  setTransaction }) {
   const [amount, setAmount] = useState("")
   const [category, setCategory] = useState("Food")
   const [type, setType] = useState("Income")
-  const [error, setError] = useState(true)
+  const [error, setError] = useState(false)
 
 
   function saveTransaction() {
@@ -79,7 +79,7 @@ export default function TransactionForm({  setTransaction }) {
           id={"category"}
           type="text"
           placeholder={"Category"}
-          className={"border-2 p-1 rounded-lg w-40"}
+          className={"border-2 p-1 rounded-lg w-40 cursor-pointer"}
         >
           <option>Food</option>
           <option>Travel</option>
@@ -101,7 +101,7 @@ export default function TransactionForm({  setTransaction }) {
           id={"type"}
           type="text"
           placeholder={"Category"}
-          className={"border-2 p-1 rounded-lg w-40"}
+          className={"border-2 p-1 rounded-lg w-40 cursor-pointer"}
         >
           <option>Income</option>
           <option>Expense</option>
@@ -110,7 +110,7 @@ export default function TransactionForm({  setTransaction }) {
 
       <div className={" mt-10 flex justify-center"}>
         <button
-          className={"border-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-40"}
+          className={"border-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-40 cursor-pointer"}
           onClick={saveTransaction}>Add Transaction
         </button>
       </div>
