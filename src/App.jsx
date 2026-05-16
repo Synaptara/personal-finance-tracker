@@ -2,7 +2,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import TransactionForm from "./components/TransactionForm.jsx";
 import {useEffect, useState} from "react";
 import TransactionList from "./components/TransactionList.jsx";
-
+import Login from "./components/Login.jsx";
 function App() {
 
   const [transaction, setTransaction] = useState(() => {
@@ -35,6 +35,7 @@ function App() {
             transaction={transaction}
             setTransaction={setTransaction}
           />}/>
+        <Route path={"/login"} element={<Login/>}/>
       </Routes>
     </>
   );
