@@ -5,3 +5,7 @@ const supabaseUrl = 'https://hankoujtpnqtycmutdfu.supabase.co';
 const supabaseKey = 'sb_publishable_yvaGEa0DBvEeG3EpEszJOQ_sMZH89oV';
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
+
+
+//sample userName(Email) = test2@test.com
+//sample Password = 12345

@@ -15,31 +15,58 @@ export default function Login() {
         password: password,
       });
 
-      if (error){
-      alert("invalid credentials" + error)}
-      else {
+      if (error) {
+        alert("invalid credentials" + error)
+      } else {
         console.log(data)
         setIsLoggedIn(true)
       }
-    }
-    catch (err){
+    } catch (err) {
       console.error(err)
     }
-
-
+  }
+  
+  async function handleLogout () {
+    try {
+      const {error} = await supabase.auth.signOut()
+      if (error){
+        alert("Error Signing out" + error.message)
+      }
+      else {
+        setUserName("")
+        setPassword("")
+        setIsLoggedIn(false)
+      }
     }
-
-
-    return (
-      <div>
+    catch (err) {
+      console.error(err)
+    }
+  }
+  
+  return (
+    <div>
+      {isLoggedIn ? (
+        <div className="text-center space-y-6 animate-fade-in">
+          <div className="text-4xl">🎉</div>
+          <h2 className="text-2xl font-bold text-gray-800">Welcome Back!</h2>
+          <p className="text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray-100">
+            Logged in as: <span className="font-semibold text-slate-800">{userName}</span>
+          </p>
+          <div className="pt-4">
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-500 text-white font-medium py-2 px-6 rounded-xl shadow-md transition-colors w-full"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>) : (
         <div className="flex items-center justify-center min-h-screen bg-gray-900">
           <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl">
             <div className="space-y-6">
               <div className="font-bold text-xl">Login Form</div>
 
-              {/* Changed to a grid container with vertical spacing */}
               <div className="grid grid-cols-1 gap-4">
-                {/* Row 1: Grid layout for User Name */}
                 <div className="grid grid-cols-3 items-center">
                   <label htmlFor="userName" className="col-span-1">
                     User Name :
@@ -87,6 +114,8 @@ export default function Login() {
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      )}
+
+    </div>
+  );
+}
