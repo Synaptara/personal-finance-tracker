@@ -6,6 +6,8 @@ export default function Login() {
   const [userName, setUserName] = useState("")
   const [password, setPassword] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isRegister, setIsRegister] = useState(false)
+  const [cPassword, setCPassword] = useState("")
 
 
   async function checkValidation() {
@@ -15,41 +17,78 @@ export default function Login() {
         password: password,
       });
 
+
       if (error) {
         alert("invalid credentials" + error)
       } else {
         console.log(data)
         setIsLoggedIn(true)
       }
+
+
     } catch (err) {
       console.error(err)
     }
   }
-  
-  async function handleLogout () {
+
+  async function handleLogout() {
     try {
+
       const {error} = await supabase.auth.signOut()
-      if (error){
+      if (error) {
         alert("Error Signing out" + error.message)
-      }
-      else {
+      } else {
         setUserName("")
         setPassword("")
         setIsLoggedIn(false)
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
     }
   }
-  
+
+  async function handleRegister() {
+
+    try {
+      if (!userName.length || !password.length || !cPassword.length ) {
+        alert("A valid user name and password needed")
+      }
+
+      else {
+        const {data, error} = await supabase.auth.signUp({
+          email: userName,
+          password: password,
+        });
+
+        if (error) {
+          alert("invalid credentials" + error)
+        } else {
+          console.log(data)
+          setIsLoggedIn(true)
+        }
+      }
+    } catch (err) {
+      console.error(err)
+    }
+
+  }
+
+  function switchToRegister() {
+    setIsRegister(true)
+  }
+
+  function switchToLogin(){
+    setIsRegister(false)
+  }
+
+
   return (
     <div>
       {isLoggedIn ? (
         <div className="text-center space-y-6 animate-fade-in">
           <div className="text-4xl">🎉</div>
           <h2 className="text-2xl font-bold text-gray-800">Welcome Back!</h2>
-          <p className="text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray-100">
+          <p className="text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray100">
             Logged in as: <span className="font-semibold text-slate-800">{userName}</span>
           </p>
           <div className="pt-4">
@@ -60,11 +99,15 @@ export default function Login() {
               Log Out
             </button>
           </div>
-        </div>) : (
+        </div>
+      ) : (
         <div className="flex items-center justify-center min-h-screen bg-gray-900">
           <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl">
             <div className="space-y-6">
-              <div className="font-bold text-xl">Login Form</div>
+              {isRegister ? (<div className="font-bold text-xl">Register Form</div>) : (
+                <div className="font-bold text-xl">Login form </div>
+              )}
+
 
               <div className="grid grid-cols-1 gap-4">
                 <div className="grid grid-cols-3 items-center">
@@ -74,6 +117,7 @@ export default function Login() {
                   <input
                     className="col-span-2 border-2 border-gray-400 rounded-xl px-2 py-1"
                     id="userName"
+
                     type="email"
                     value={userName}
                     onChange={(e) => {
@@ -97,17 +141,66 @@ export default function Login() {
                     }}
                   />
                 </div>
+                <div>{isRegister ? (<div className="grid grid-cols-3 items-center">
+                  <label htmlFor="password" className="col-span-1">
+                    Confirm Password :
+                  </label>
+                  <input
+                    className="col-span-2 border-2 border-gray-400 rounded-xl px-2 py-1"
+                    id="cPassword"
+                    value={cPassword}
+                    type="password"
+                    onChange={(e) => {
+                      setCPassword(e.target.value);
+                    }}
+                  />
+                </div>) : ("")}</div>
                 <div>
-                  <button
-                    onClick={checkValidation}
-                    className={
-                      "bg-slate-800 rounded-md p-1 w-20 text-white hover:bg-slate-600"
-                    }
-                  >
-                    Login
-                  </button>
+                  <div> {!isRegister ? (
+                    <button
+                      onClick={checkValidation}
+                      className={
+                        "bg-slate-800 rounded-md p-1 w-20 text-white hover:bg-slate-600"
+                      }
+                    >
+                      <div>Login</div>
+                    </button>) : (
+                    <button
+                      onClick={() => {
+                        if (password === cPassword) {
+                          handleRegister()
+                        } else {
+                          alert("Password is not matched")
+                        }
+                      }}
+                      className={
+                        "bg-slate-800 rounded-md p-1 w-20 text-white hover:bg-slate-600"
+                      }
+                    >
+                      <div>Register</div>
+                    </button>
+                  )}
+
+                  </div>
                 </div>
               </div>
+
+
+              {isRegister ? (<button
+                className={
+                  " rounded-md p-1 w-20 text-black cursor-pointer underline"
+                }
+                onClick={switchToLogin}>Login
+              </button>
+              ) : (<div>
+                <button
+                  className={
+                    " rounded-md p-1 w-20 text-black cursor-pointer underline"
+                  }
+                  onClick={switchToRegister}>Register
+                </button>
+              </div>)
+              }
               <div>
                 {isLoggedIn && <p> hello {userName} 👋 </p>}
               </div>

@@ -21,6 +21,7 @@ function App() {
       <div className={"text-center bg-blue-600 font-extrabold space-x-3 text-white"}>
         <Link to="/"> GO TO ADD TRANSACTION</Link>
         <Link to="/list"> GO TO LIST PAGE</Link>
+        <Link to="/login"> LOGIN</Link>
       </div>
       <Routes>
         <Route
