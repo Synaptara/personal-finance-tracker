@@ -1,13 +1,21 @@
-import {useState} from "react";
 import {supabase} from "../supabase.js";
+import {useNavigate} from "react-router-dom";
+import {useState} from "react";
+import {useContext} from "react";
+import {AuthContext} from "./AuthContext.jsx";
 
 export default function Login() {
 
   const [userName, setUserName] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isRegister, setIsRegister] = useState(false)
   const [cPassword, setCPassword] = useState("")
+
+  const { isLoggedIn, handleLogout , setIsLoggedIn} = useContext(AuthContext);
+
+  const navigate = useNavigate()
+
+
 
 
   async function checkValidation() {
@@ -23,6 +31,8 @@ export default function Login() {
       } else {
         console.log(data)
         setIsLoggedIn(true)
+        navigate("/transaction")
+
       }
 
 
@@ -31,30 +41,13 @@ export default function Login() {
     }
   }
 
-  async function handleLogout() {
-    try {
-
-      const {error} = await supabase.auth.signOut()
-      if (error) {
-        alert("Error Signing out" + error.message)
-      } else {
-        setUserName("")
-        setPassword("")
-        setIsLoggedIn(false)
-      }
-    } catch (err) {
-      console.error(err)
-    }
-  }
 
   async function handleRegister() {
 
     try {
-      if (!userName.length || !password.length || !cPassword.length ) {
+      if (!userName.length || !password.length || !cPassword.length) {
         alert("A valid user name and password needed")
-      }
-
-      else {
+      } else {
         const {data, error} = await supabase.auth.signUp({
           email: userName,
           password: password,
@@ -65,6 +58,8 @@ export default function Login() {
         } else {
           console.log(data)
           setIsLoggedIn(true)
+          navigate("/transaction")
+
         }
       }
     } catch (err) {
@@ -77,7 +72,7 @@ export default function Login() {
     setIsRegister(true)
   }
 
-  function switchToLogin(){
+  function switchToLogin() {
     setIsRegister(false)
   }
 
@@ -187,11 +182,11 @@ export default function Login() {
 
 
               {isRegister ? (<button
-                className={
-                  " rounded-md p-1 w-20 text-black cursor-pointer underline"
-                }
-                onClick={switchToLogin}>Login
-              </button>
+                  className={
+                    " rounded-md p-1 w-20 text-black cursor-pointer underline"
+                  }
+                  onClick={switchToLogin}>Login
+                </button>
               ) : (<div>
                 <button
                   className={
